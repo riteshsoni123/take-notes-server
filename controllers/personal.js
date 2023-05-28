@@ -7,10 +7,11 @@ exports.getPrivateData = async (req, res, next) => {
 
 exports.addelement = async (req, res, next) => {
   try {
-    const { element } = req.body;
+    const element = req.body;
 
     const list = new List({
-      element,
+      title: element.title,
+      description: element.description,
       user: req.user.id,
     });
 
@@ -29,7 +30,7 @@ exports.getList = async (req, res, next) => {
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: "can't fond the notes for this user" });
+      .json({ success: false, message: "can't find the notes for this user" });
   }
 };
 
@@ -48,7 +49,7 @@ exports.deleteelement = async (req, res, next) => {
 exports.editelement = async (req, res, next) => {
   List.findByIdAndUpdate(
     req.params.id,
-    { element: req.body.element },
+    { title: req.body.title, description: req.body.description },
     (err, docs) => {
       if (!err) {
         res.status(200).json({ success: true, message: "Edited the item" });
